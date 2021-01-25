@@ -21,8 +21,8 @@ public class AporteAMQPConfig {
     public static final String QUEUE = "novo-aporte";
     private static final String ROUTING_KEY = "";
 
-//    @Value("${app.amqp.url}")
-//    private String url;
+    @Value("${app.amqp.url}")
+    private String url;
 
     @Bean
     public Exchange declareExchange() {
@@ -45,40 +45,41 @@ public class AporteAMQPConfig {
                 .noargs();
     }
 
-//    @Bean
-//    public ConnectionFactory connectionFactory() {
-//        final URI amqpUrl;
-//        try {
-//            amqpUrl = new URI(getEnvOrThrow());
-//        } catch (URISyntaxException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        final CachingConnectionFactory factory = new CachingConnectionFactory();
-//        factory.setUsername(amqpUrl.getUserInfo().split(":")[0]);
-//        factory.setPassword(amqpUrl.getUserInfo().split(":")[1]);
-//        factory.setHost(amqpUrl.getHost());
-//        factory.setPort(amqpUrl.getPort());
-//        factory.setVirtualHost(amqpUrl.getPath().substring(1));
-//
-//        return factory;
-//    }
-//
-//    @Bean
-//    public AmqpAdmin amqpAdmin() {
-//        return new RabbitAdmin(connectionFactory());
-//    }
-//
-//    @Bean
-//    public RabbitTemplate rabbitTemplate() {
-//        return new RabbitTemplate(connectionFactory());
-//    }
-//
-//    private String getEnvOrThrow() {
-//        final String env = getenv("CLOUDAMQP_URL");
-//        if (env == null) {
-//            return url;
-//        }
-//        return env;
-//    }
+    @Bean
+    public ConnectionFactory connectionFactory() {
+        final URI amqpUrl;
+        try {
+            amqpUrl = new URI(getEnvOrThrow());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
+        final CachingConnectionFactory factory = new CachingConnectionFactory();
+        factory.setUsername(amqpUrl.getUserInfo().split(":")[0]);
+        factory.setPassword(amqpUrl.getUserInfo().split(":")[1]);
+        factory.setHost(amqpUrl.getHost());
+        factory.setPort(amqpUrl.getPort());
+        factory.setVirtualHost(amqpUrl.getPath().substring(1));
+
+        return factory;
+    }
+
+    @Bean
+    public AmqpAdmin amqpAdmin() {
+        return new RabbitAdmin(connectionFactory());
+    }
+
+    @Bean
+    public RabbitTemplate rabbitTemplate() {
+        return new RabbitTemplate(connectionFactory());
+    }
+
+    private String getEnvOrThrow() {
+        final String env = getenv("CLOUDAMQP_URL");
+        if (env == null) {
+            return url;
+        }
+        return env;
+    }
+
 }
